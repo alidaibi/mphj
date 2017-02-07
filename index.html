@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>满屏滑稽</title>
+  <style>
+  	*{ margin: 0; padding: 0; }
+  	html,body{ height: 100%; overflow: hidden; }
+  	#huaji-main{
+  		-moz-perspective: 201px;
+	    -webkit-perspective: 201px;
+	    perspective: 201px;
+	    position: relative;
+  	}
+  	.huaji{ 
+  		position: absolute;
+	    width: 200px;
+	    transform: translateZ(-200px);
+	    background-color: transparent;
+	}
+  </style>
+ </head>
+ <body>
+ 	<div id="huaji-main">
+
+ 	</div>
+  	<script>
+  		(function(window){
+  			var huajiArr = [];
+  			var path = "./images/huaji.png";
+  			var className = "huaji";
+  			var container = document.querySelector("#huaji-main");
+  			var hjs = [];
+  			function huaji(x,y,z){
+  				this.x = x;
+  				this.y = y;
+  				this.z = z || 20;
+  			}
+  			function createHuaji(max){
+  				for(var i = 0; i < max; i++){
+  					var x = Math.floor(Math.random() *  1324);
+  					var y = Math.floor(Math.random() *  628);
+  					var z = Math.floor(Math.random() *  -800);
+  					var hj = new huaji(x,y,z);
+  					huajiArr.push(hj);
+  				}
+  				for(var j = 0, len = huajiArr.length; j < len; j++){
+  					var hj = document.createElement("img");
+  					var obj = huajiArr[j];
+  					hj.src = path;
+  					hj.className = className;
+  					hj.style.left = obj.x + "px";
+  					hj.style.top = obj.y + "px";
+  					hj.style.transform = "translateZ(" + obj.z + "px)";
+  					hj.style.zIndex = j;
+  					container.appendChild(hj);
+  					hjs.push(hj);
+  				}
+  			}
+  			createHuaji(100);
+  			
+  			huaji.prototype.update = function(){
+  				if(this.z >= 300){
+  					this.z = Math.floor(Math.random() *  -800);
+  				}
+  				this.z += 1;
+  			}
+  			
+  			function loopMove(){
+  				var that = this;
+  				for(var i = 0; i<hjs.length;i++){
+  					var hj = hjs[i];
+  					var obj = huajiArr[i];
+  					obj.update();
+  					hj.style.transform = "translateZ(" + obj.z + "px)";
+  				}
+  				this.loop = requestAnimationFrame(function(){
+  					loopMove.apply(that);
+  				});
+  			}
+  			loopMove();
+
+  		})(window);
+  	</script>	
+ </body>
+</html>
